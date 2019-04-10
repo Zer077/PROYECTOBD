@@ -1,4 +1,4 @@
-
+﻿
 --Trabajo BD 
 
 DROP TABLE MATRICULADO;
@@ -168,27 +168,103 @@ END BuclePrincipal;
 
 
 --VER DATOS DE LA TABLA QUE TE PIDA
+
 create or replace PROCEDURE VERTABLA IS
-V1 NUMBER(1);
-    BEGIN
+    V1 NUMBER(1);
+    cursor n1 is SELECT ID_PROV ,NOMBRE  FROM PROVINCIA;
+    cursor n2 is SELECT ID_PROF ,NOMBRE ,APELLIDOS ,DNI ,NACIDO_EN  FROM PROFESOR;
+    cursor n3 is SELECT ID_ALUM ,DNI ,NOMBRE ,APELLIDOS ,FECHA_NAC ,NACIDO_EN  FROM ALUMNO;
+    cursor n4 is SELECT ID_ALUM ,ID_ASIG ,NOTA1 ,FECHA1 ,NOTA2 ,FECHA2 ,NOTA3 ,FECHA3  FROM MATRICULADO;
+    cursor n5 is SELECT ID_ASIG ,NOMBRE  FROM ASIGNATURA;
+    cursor n6 is SELECT ID_PROF ,ID_ASIG  FROM IMPARTE;
+    registro1 n1%ROWTYPE;
+    registro2 n2%ROWTYPE;
+    registro3 n3%ROWTYPE;
+    registro4 n4%ROWTYPE;
+    registro5 n5%ROWTYPE;
+    registro6 n6%ROWTYPE;
+
+BEGIN
         DBMS_OUTPUT.PUT_LINE ('1.PROVINCIA');
         DBMS_OUTPUT.PUT_LINE ('2.PROFESOR');
         DBMS_OUTPUT.PUT_LINE ('3.ALUMNO');
         DBMS_OUTPUT.PUT_LINE ('4.MATRICULADO');
         DBMS_OUTPUT.PUT_LINE ('5.ASIGNATURA');
         DBMS_OUTPUT.PUT_LINE ('6.IMPARTE');
-        V1 := '';
-        CASE V1
-            WHEN V1=1 THEN SELECT * FROM PROVINCIA;
-            WHEN V1=2  THEN SELECT * FROM PROFESOR;
-            WHEN V1=3  THEN SELECT * FROM ALUMNO;
-            WHEN V1=4  THEN SELECT * FROM MATRICULADO;
-            WHEN V1=5  THEN SELECT * FROM ASIGNATURA;
-            WHEN V1=6  THEN SELECT * FROM IMPARTE;
+        V1 := '&elegir que tabla ver';
+        CASE
+            WHEN V1=1 THEN 
+                open n1;
+                    loop
+                    FETCH n1 INTO registro1;
+                        exit  when n1%notfound;
+                        dbms_output.put_line ('provincia: ' || registro1.ID_PROV || ' nombre: '|| registro1.NOMBRE);
+                    end loop;
+                close n1;
+
+            WHEN V1=2 THEN 
+                open n2;
+                    loop
+                        FETCH n2 INTO registro2;
+                        exit  when n2%notfound;
+                        dbms_output.put_line('ID: '||registro2.ID_PROF || ' nombre: '||registro2.NOMBRE || ' APELLIDO: '||registro2.APELLIDOS || ' DNI: '||registro2.DNI || ' Nacido en: '||registro2.NACIDO_EN);
+                    end loop;
+
+                close n2;
+
+            WHEN V1=3 THEN 
+                open n3;
+
+                    loop
+                        FETCH n3 INTO registro3;
+                        exit  when n3%notfound;
+                        dbms_output.put_line('ID: '||registro3.ID_ALUM  || ' DNI: '||registro3.DNI || ' nombre: '|| registro3.NOMBRE || ' APELLIDO: '||registro3.APELLIDOS || ' FECHA: '||registro3.FECHA_NAC || ' NACIDO EN: '||registro3.NACIDO_EN);
+                    end loop;
+
+                close n3;
+
+            WHEN V1=4 THEN 
+            open n4;
+
+                loop
+                    FETCH n4 INTO registro4;
+                    exit  when n4%notfound;
+                    dbms_output.put_line('ID ALUMNO: '||registro4.ID_ALUM || ' ID ASIGNATURA: '||registro4.ID_ASIG || ' NOTA1: '||registro4.NOTA1 || ' FECHA1: '||registro4.FECHA1 ||' nOTA2: '|| registro4.NOTA2 || ' FECHA2: '||registro4.FECHA2 || ' noTA3: '||registro4.NOTA3 || ' FECHA3: '||registro4.FECHA3);
+                end loop;
+
+            close n4;          
+
+            WHEN V1=5 THEN 
+                open n5;
+
+                    loop
+                        FETCH n5 INTO registro5;
+                        exit  when n5%notfound;
+                        dbms_output.put_line('ID ASIGNATURA: '||registro5.ID_ASIG || ' nombre: '||registro5.NOMBRE);
+                    end loop;
+
+                close n5;
+
+            WHEN V1=6 THEN 
+                open n6;
+
+                    loop
+                        FETCH n6 INTO registro6;
+                        exit  when n6%notfound;
+                        dbms_output.put_line('ID PROFESOR: '||registro6.ID_PROF || ' ID ASIGNATURA: '||registro6.ID_ASIG);
+                    end loop;
+
+                close n6;
+
             ELSE DBMS_OUTPUT.PUT_LINE('Numero inválido');
         END CASE;
+        
+Exception
+
+DBMS_OUTPUT.PUT_LINE('Numero inválido');
+
+        
 END VERTABLA;
-/
 
 
 
@@ -199,4 +275,114 @@ END VERTABLA;
 --FUNCION QUE TE DE LA MEDIA DE NOTAS DE TODOS LOS ALUMNOS DE UNA ASIGNATURA PARA IN PROFESOR
 
 --PROCEDIMIENTO QUE DE EL PORCENTAJE DE APROBADOS Y SUSPENSOS DE CADA ASIGNATURA
+
+
+--PORCENTAJE DE APROBADOS Y SUSPENSO POR PROFESOR POR ASIGNATURA
+
+create or replace procedure Cambiodenota is 
+declare
+
+    fecha date;
+
+begin
+
+    alumno:='&alumno a modificar (numero)'
+    asignatura:='&asignatura a modificar (numero)'
+    opcion:='& nota a modificar 1.Nota 1, 2.Nota 2, 3.Nota 3'
+    
+    case when opcion:
+    
+        when opcion=1 then fecha:= select fecha1 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;   
+        when opcion=2 then fecha:= select fecha2 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+        when opcion=3 then fecha:= select fecha3 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+    
+    end case
+    
+    if(ComprobacionFechaYUsuario(fecha)=true) then
+        nota:='&que nota deseas ponerle al alumno seleccionado?'
+    
+        case when opcion:
+        
+            when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
+            when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+        
+        end case
+    
+    end if;
+    
+exception
+DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
+
+end Cambiodenota
+/
+
+
+
+
+
+
+
+create or replace function ComprobacionFechaYUsuario(fecha date) is
+return boolean
+begin
+
+    if (select CURRENT_USER=DIRECTOR)
+        return true;
+        elsif (sysdate between fecha and fecha2 ) then
+            return true;
+        else return false;
+        end if;
+    end if;
+
+end ComprobacionFechaYUsuario;
+/
+
+
+
+
+
+create or replace procedure Porcentajes is 
+declare
+    total number(20);
+    suspensos number(20);
+    aprobados number(20);
+    cursor alumnos is
+    select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum group by a.id_alum;
+    registro alumnos%ROWTYPE
+
+begin
+
+
+    total:=select count(a.id_alum) from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum;
+    
+    open alumnos;
+        loop
+            fetch alumnos into registro;
+            EXIT WHEN alumnos%NOTFOUND;
+            if (registro.notaFinal>=5)
+                aprobados:=probados+1;
+            else suspensos:=suspensos+1;
+        end loop;
+    
+    
+    
+    DBMS_OUTPUT.PUT_LINE('aprobado: '|| (aprobados/total)*100);
+    DBMS_OUTPUT.PUT_LINE('suspensos: '|| (suspensos/total)*100);
+ 
+    exception
+    DBMS_OUTPUT.PUT_LINE('errror inesperado ');
+
+
+
+end Porcentajes;
+/
+
+
+
+
+
+
+
+
 
