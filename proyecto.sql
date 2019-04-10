@@ -286,35 +286,35 @@ declare
 
 begin
 
-    alumno:='&alumno a modificar (numero)'
-    asignatura:='&asignatura a modificar (numero)'
-    opcion:='& nota a modificar 1.Nota 1, 2.Nota 2, 3.Nota 3'
+    alumno:='&alumno a modificar (numero)';
+    asignatura:='&asignatura a modificar (numero)';
+    opcion:='&nota a modificar 1.Nota 1, 2.Nota 2, 3.Nota 3';
     
-    case when opcion:
+    case
     
         when opcion=1 then fecha:= select fecha1 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;   
         when opcion=2 then fecha:= select fecha2 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
         when opcion=3 then fecha:= select fecha3 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
     
-    end case
+    end case;
     
     if(ComprobacionFechaYUsuario(fecha)=true) then
-        nota:='&que nota deseas ponerle al alumno seleccionado?'
+        nota:='&que nota deseas ponerle al alumno seleccionado?';
     
-        case when opcion:
+        case
         
             when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
             when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
             when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
         
-        end case
+        end case;
     
     end if;
     
 exception
 DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
 
-end Cambiodenota
+end Cambiodenota;
 /
 
 
@@ -323,13 +323,14 @@ end Cambiodenota
 
 
 
-create or replace function ComprobacionFechaYUsuario(fecha date) is
+create or replace function ComprobacionFechaYUsuario(fecha date)
 return boolean
+
 begin
 
     if (select CURRENT_USER=DIRECTOR)
         return true;
-        elsif (sysdate between fecha and fecha2 ) then
+        elsif (sysdate between fecha and fecha+7 ) then
             return true;
         else return false;
         end if;
@@ -379,7 +380,45 @@ end Porcentajes;
 /
 
 
+create or replace procedure Cambiodenota is 
 
+    fecha date;
+    alumno varchar2(10);
+    asignatura varchar2(10);
+    opcion varchar2(10);
+
+begin
+
+    alumno:=1;
+    asignatura:=1;
+    opcion:=1;
+
+    case
+
+        when opcion=1 then select fecha1 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;   
+        when opcion=2 then select fecha2 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+        when opcion=3 then select fecha3 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+
+    end case;
+
+    if(ComprobacionFechaYUsuario(fecha)=true) then
+        nota:=' nota deseas ponerle al alumno seleccionado?';
+
+        case
+
+            when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
+            when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+
+        end case;
+
+    end if;
+
+exception
+ WHEN others THEN 
+    DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
+
+end Cambiodenota;
 
 
 
