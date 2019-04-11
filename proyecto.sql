@@ -1,4 +1,3 @@
-ï»¿
 --Trabajo BD 
 
 DROP TABLE MATRICULADO;
@@ -152,11 +151,48 @@ END BuclePrincipal;
 
 --PROCEDIMIENTO QUE CREE UN BOLETIN DE NOTAS
 
---FUNCION QUE SAQUE LA NOTA1 DE UN ALUMNO
+--FUNCION QUE SAQUE LA NOTA1 DE UN ALUMNO Juan Martín Ayala 10/04/2019--
 
---FUNCION QUE SAQUE LA NOTA2 DE UN ALUMNO
+create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA1 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
 
---FUNCION QUE SAQUE LA NOTA3 DE UN ALUMNO
+END NOTA1_ALUMNO;
+/
+--Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA2 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
+
+END NOTA2_ALUMNO;
+/
+
+--Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA3 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
+
+END NOTA3_ALUMNO;
+/
+
 
 --PROCEDIMIENTO QUE DADA X ASIGNATURA MUESTRA TODOS LOS ALUMNOS
 
@@ -164,7 +200,94 @@ END BuclePrincipal;
 --**********AUDITORIA**********--
 
 --PROCEDIMIENTO QUE DEVUELVA LA NOTA 1 2  O 3 DE UN ALUMNO Y ASIGNATURA Y TE PERMITA MODIFICARLA (SOLO 7 DIAS) POSTERIOR A ESO SOLO A UN USUARIO DIRECTOR
+create or replace procedure Cambiodenota(alumno number, asignatura number, opcion number, nota number) is 
+
+
+    fecha date;
+    cursor fechaN1 is
+    select fecha1 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+    registro1 fechaN1%rowtype;
+    
+    cursor fechaN2 is
+     select fecha2 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+     registro2 fechaN2%rowtype;
+     
+    cursor fechaN3 is
+    select fecha3 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
+    registro3 fechaN3%rowtype;
+    
+begin
+
+    case
+
+        when opcion=1 then   
+        FETCH fechan1 INTO registro1;
+        fecha:= registro1.fecha1;
+        when opcion=2 then 
+        FETCH fechan2 INTO registro2;
+        fecha:= registro2.fecha2;
+        
+        when opcion=3 then 
+        FETCH fechan3 INTO registro3;
+        fecha:= registro3.fecha3;
+
+
+    end case;
+
+    if(ComprobacionFechaYUsuario(fecha)=true) then
+
+        case
+
+            when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
+            when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+
+        end case;
+
+    end if;
+
+exception
+when others then
+DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
+
+end Cambiodenota;
+/
+
+
+
+create or replace function ComprobacionFechaYUsuario(fecha date)
+return boolean is
+begin
+
+    if (USER='DIRECTOR') then
+        return true;
+    if (sysdate between fecha and fecha+7 ) then
+            return true;
+        else return false;
+        end if;
+        end if;
+
+
+end ComprobacionFechaYUsuario;
+/
+
+
+
+
 --**********AUDITORIA**********--
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 --VER DATOS DE LA TABLA QUE TE PIDA
@@ -270,85 +393,18 @@ END VERTABLA;
 
 
 
---FUNCION QUE DE LA NOTA MEDIA DE 3 NOTAS
-
---FUNCION QUE TE DE LA MEDIA DE NOTAS DE TODOS LOS ALUMNOS DE UNA ASIGNATURA PARA IN PROFESOR
-
---PROCEDIMIENTO QUE DE EL PORCENTAJE DE APROBADOS Y SUSPENSOS DE CADA ASIGNATURA
 
 
---PORCENTAJE DE APROBADOS Y SUSPENSO POR PROFESOR POR ASIGNATURA
-
-create or replace procedure Cambiodenota is 
-declare
-
-    fecha date;
-
-begin
-
-    alumno:='&alumno a modificar (numero)';
-    asignatura:='&asignatura a modificar (numero)';
-    opcion:='&nota a modificar 1.Nota 1, 2.Nota 2, 3.Nota 3';
-    
-    case
-    
-        when opcion=1 then fecha:= select fecha1 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;   
-        when opcion=2 then fecha:= select fecha2 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
-        when opcion=3 then fecha:= select fecha3 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
-    
-    end case;
-    
-    if(ComprobacionFechaYUsuario(fecha)=true) then
-        nota:='&que nota deseas ponerle al alumno seleccionado?';
-    
-        case
-        
-            when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
-            when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
-            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
-        
-        end case;
-    
-    end if;
-    
-exception
-DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
-
-end Cambiodenota;
-/
-
-
-
-
-
-
-
-create or replace function ComprobacionFechaYUsuario(fecha date)
-return boolean is
-begin
-
-    if (USER='DIRECTOR') then
-        return true;
-    if (sysdate between fecha and fecha+7 ) then
-            return true;
-        else return false;
-        end if;
-
-
-end ComprobacionFechaYUsuario;
-/
-
-
-
-
-
+--procedimiento de porcentajes de aprobados por asignatura
 create or replace procedure Porcentajes(asignaturaElegida varchar2) is 
 
     total number(20);
     suspensos number(20);
     aprobados number(20);
+    final1 number(20);
+    final2 number(20);
     cursor alumnosNota is
-    select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum group by a.id_alum;
+    select sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum group by a.id_alum;
     registro alumnosNota%ROWTYPE;
 
     --llamar funcion nota media con alumno y asignatura
@@ -374,9 +430,10 @@ begin
         end loop;
 
 close alumnosNota;
-
-    DBMS_OUTPUT.PUT_LINE('aprobado: '|| (aprobados/total)*100);
-    DBMS_OUTPUT.PUT_LINE('suspensos: '|| (suspensos/total)*100);
+final1:=((aprobados/total)*100);
+final2:=((suspensos/total)*100);
+    DBMS_OUTPUT.PUT_LINE('aprobado: '|| final1);
+    DBMS_OUTPUT.PUT_LINE('suspensos: '|| final2 );
 
     exception
     when  others then
@@ -385,91 +442,22 @@ close alumnosNota;
 
 
 end Porcentajes;
-
 /
 
 
-create or replace procedure Cambiodenota is 
 
-    fecha date;
-    alumno varchar2(10);
-    asignatura varchar2(10);
-    opcion varchar2(10);
-    nota number(10);
 
-begin
 
-    alumno:=1;
-    asignatura:=1;
-    opcion:=1;
 
-    case
 
-        when opcion=1 then select fecha1 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;   
-        when opcion=2 then select fecha2 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
-        when opcion=3 then select fecha3 into fecha from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
 
-    end case;
 
-    if(ComprobacionFechaYUsuario(fecha)=true) then
-        nota:=' nota deseas ponerle al alumno seleccionado?';
 
-        case
 
-            when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
-            when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
-            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
 
-        end case;
 
-    end if;
 
-exception
- WHEN others THEN 
-    DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
 
-end Cambiodenota;
-/
-
-create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA1 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA1_ALUMNO;
-/
---Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
-create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA2 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA2_ALUMNO;
-/
-
---Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
-create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA3 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA3_ALUMNO;
-/
 
 
 
