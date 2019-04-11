@@ -1,0 +1,61 @@
+--Funcion. Muestra la nota 1 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA1 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
+
+END NOTA1_ALUMNO;
+
+--Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA2 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
+
+END NOTA2_ALUMNO;
+
+--Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+    RETURN NUMBER IS
+    NOTA NUMBER;
+BEGIN
+    SELECT NOTA3 INTO NOTA
+        FROM MATRICULADO 
+        WHERE ID_ALUM=ALUM 
+        AND ID_ASIG=ASIG;
+    RETURN NOTA;
+
+END NOTA3_ALUMNO;
+
+--Procedimiento. Muestra la nota media de un alumno en una asignatura dada. Juan Martín Ayala 08/04/2019--
+create or replace PROCEDURE NOTA_MEDIA(alum numeric,asig numeric) IS
+    n1 numeric;
+    n2 numeric;
+    n3 numeric;
+    media numeric;
+BEGIN
+    n1:=nota1_alumno(alum,asig);
+    n2:=nota2_alumno(alum,asig);
+    n3:=nota3_alumno(alum,asig);
+    media:=(n1+n2+n3)/3;
+    
+    dbms_output.put_line('Alumno: ' || alum);
+    dbms_output.put_line('Asignatura: ' || asig);
+    DBMS_OUTPUT.PUT_LINE ('-----');
+    dbms_output.put_line('Nota 1: ' || n1);
+    dbms_output.put_line('Nota 2: ' || n2);
+    dbms_output.put_line('Nota 3: ' || n3);
+    DBMS_OUTPUT.PUT_LINE ('-----');
+    dbms_output.put_line('Nota media: ' || media);
+
+END NOTA_MEDIA;
