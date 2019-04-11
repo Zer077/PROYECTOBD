@@ -324,18 +324,17 @@ end Cambiodenota;
 
 
 create or replace function ComprobacionFechaYUsuario(fecha date)
-return boolean is
-
+return boolean
 
 begin
 
-    if (USER='DIRECTOR') then
+    if (select CURRENT_USER=DIRECTOR)
         return true;
         elsif (sysdate between fecha and fecha+7 ) then
             return true;
         else return false;
         end if;
-
+    end if;
 
 end ComprobacionFechaYUsuario;
 /
@@ -345,48 +344,34 @@ end ComprobacionFechaYUsuario;
 
 
 create or replace procedure Porcentajes is 
-
+declare
     total number(20);
     suspensos number(20);
     aprobados number(20);
-    --cursor alumnos is
-    --select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum group by a.id_alum;
-    --registro alumnos%ROWTYPE;
-    
-    --llamar funcion nota media con alumno y asignatura
-    cursor alumnosTotales is
-    select count(a.id_alum) as totales from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum;
-    registro1 alumnosTotales%ROWTYPE;
+    cursor alumnos is
+    select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum group by a.id_alum;
+    registro alumnos%ROWTYPE
 
-    
 begin
 
-    open alumnosTotales;
-    
-        total:=registro1.totales;
-    
-    
-    close alumnosTotales;
-   
 
-
+    total:=select count(a.id_alum) from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum;
+    
     open alumnos;
         loop
             fetch alumnos into registro;
             EXIT WHEN alumnos%NOTFOUND;
-            if (registro.notaFinal>=5) then
-                aprobados:=aprobados+1;
+            if (registro.notaFinal>=5)
+                aprobados:=probados+1;
             else suspensos:=suspensos+1;
-            end if;
         end loop;
-
-close alumnos;
-
+    
+    
+    
     DBMS_OUTPUT.PUT_LINE('aprobado: '|| (aprobados/total)*100);
     DBMS_OUTPUT.PUT_LINE('suspensos: '|| (suspensos/total)*100);
-
+ 
     exception
-    when  others then
     DBMS_OUTPUT.PUT_LINE('errror inesperado ');
 
 
@@ -401,7 +386,6 @@ create or replace procedure Cambiodenota is
     alumno varchar2(10);
     asignatura varchar2(10);
     opcion varchar2(10);
-    nota number(10);
 
 begin
 
@@ -435,7 +419,6 @@ exception
     DBMS_OUTPUT.PUT_LINE('introducte los datos correctamente por favor');
 
 end Cambiodenota;
-/
 
 
 
