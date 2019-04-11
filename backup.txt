@@ -325,11 +325,13 @@ end Cambiodenota;
 
 create or replace function ComprobacionFechaYUsuario(fecha date)
 return boolean is
+
+
 begin
 
     if (USER='DIRECTOR') then
         return true;
-    if (sysdate between fecha and fecha+7 ) then
+        elsif (sysdate between fecha and fecha+7 ) then
             return true;
         else return false;
         end if;
@@ -342,38 +344,43 @@ end ComprobacionFechaYUsuario;
 
 
 
-create or replace procedure Porcentajes(asignaturaElegida varchar2) is 
+create or replace procedure Porcentajes is 
 
     total number(20);
     suspensos number(20);
     aprobados number(20);
-    cursor alumnosNota is
-    select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum group by a.id_alum;
-    registro alumnosNota%ROWTYPE;
-
+    --cursor alumnos is
+    --select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum group by a.id_alum;
+    --registro alumnos%ROWTYPE;
+    
     --llamar funcion nota media con alumno y asignatura
     cursor alumnosTotales is
-    select count(a.id_alum) as totales from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum;
+    select count(a.id_alum) as totales from matriculado m, alumno a where id_asig=1 and a.id_alum=m.id_alum;
     registro1 alumnosTotales%ROWTYPE;
 
-
+    
 begin
 
     open alumnosTotales;
+    
         total:=registro1.totales;
+    
+    
     close alumnosTotales;
+   
 
-    open alumnosNota;
+
+    open alumnos;
         loop
-            fetch alumnosNota into registro;
-            EXIT WHEN alumnosNota%NOTFOUND;
+            fetch alumnos into registro;
+            EXIT WHEN alumnos%NOTFOUND;
             if (registro.notaFinal>=5) then
                 aprobados:=aprobados+1;
             else suspensos:=suspensos+1;
             end if;
         end loop;
 
-close alumnosNota;
+close alumnos;
 
     DBMS_OUTPUT.PUT_LINE('aprobado: '|| (aprobados/total)*100);
     DBMS_OUTPUT.PUT_LINE('suspensos: '|| (suspensos/total)*100);
@@ -385,7 +392,6 @@ close alumnosNota;
 
 
 end Porcentajes;
-
 /
 
 
@@ -431,45 +437,8 @@ exception
 end Cambiodenota;
 /
 
-create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA1 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
 
-END NOTA1_ALUMNO;
-/
---Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
-create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA2 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
 
-END NOTA2_ALUMNO;
-/
-
---Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
-create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA3 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA3_ALUMNO;
-/
 
 
 
