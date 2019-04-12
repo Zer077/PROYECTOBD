@@ -122,6 +122,8 @@ INSERT INTO MATRICULADO (ID_ALUM, ID_ASIG, Nota1, Nota2, Nota3) VALUES (8, 2, 4,
 INSERT INTO MATRICULADO (ID_ALUM, ID_ASIG, Nota1, Nota2, Nota3) VALUES (9, 2, 7, 7, 7);
 INSERT INTO MATRICULADO (ID_ALUM, ID_ASIG, Nota1, Nota2, Nota3) VALUES (9, 3, 6, 7, 8);
 INSERT INTO MATRICULADO (ID_ALUM, ID_ASIG, Nota1, Nota2, Nota3) VALUES (10, 2, 9, 5, 5);
+INSERT INTO MATRICULADO (ID_ALUM, ID_ASIG, Nota1,FECHA1, Nota2,FECHA2, Nota3, FECHA3) VALUES (11, 1, 9,'12/04/2019', 5,'12/04/2019', 5,'12/04/2019' );
+
 
 COMMIT;
 
@@ -207,29 +209,37 @@ create or replace procedure Cambiodenota(alumno number, asignatura number, opcio
     cursor fechaN1 is
     select fecha1 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
     registro1 fechaN1%rowtype;
-    
+
     cursor fechaN2 is
      select fecha2 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
      registro2 fechaN2%rowtype;
-     
+
     cursor fechaN3 is
     select fecha3 from matriculado where ID_ALUM=alumno AND ID_ASIG=asignatura;
     registro3 fechaN3%rowtype;
-    
+
 begin
 
     case
 
-        when opcion=1 then   
-        FETCH fechan1 INTO registro1;
-        fecha:= registro1.fecha1;
+        when opcion=1 then
+        OPEN FECHAN1;
+            FETCH fechan1 INTO registro1;
+            fecha:= registro1.fecha1;
+        CLOSE FECHAN1;
+            
         when opcion=2 then 
-        FETCH fechan2 INTO registro2;
-        fecha:= registro2.fecha2;
-        
+        OPEN FECHAN2;
+            FETCH fechan2 INTO registro2;
+            fecha:= registro2.fecha2;
+        CLOSE FECHAN2;
+
+
         when opcion=3 then 
-        FETCH fechan3 INTO registro3;
-        fecha:= registro3.fecha3;
+        OPEN FECHAN3;
+            FETCH fechan3 INTO registro3;
+            fecha:= registro3.fecha3;
+        CLOSE FECHAN3;
 
 
     end case;
@@ -240,7 +250,7 @@ begin
 
             when opcion=1 then UPDATE matriculado set nota1=nota where id_alum=alumno;   
             when opcion=2 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
-            when opcion=3 then UPDATE matriculado set nota2=nota where id_alum=alumno;  
+            when opcion=3 then UPDATE matriculado set nota3=nota where id_alum=alumno;  
 
         end case;
 
@@ -260,14 +270,15 @@ return boolean is
 begin
 
     if (USER='DIRECTOR') then
-        return true;
-    if (sysdate between fecha and fecha+7 ) then
             return true;
-        else return false;
-        end if;
-        end if;
-
-
+    end if;     
+        
+    if (sysdate between fecha and fecha+7 ) then
+        return true;
+    else              
+        return false;
+    end if;
+ 
 end ComprobacionFechaYUsuario;
 /
 
@@ -314,7 +325,7 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE ('4.MATRICULADO');
         DBMS_OUTPUT.PUT_LINE ('5.ASIGNATURA');
         DBMS_OUTPUT.PUT_LINE ('6.IMPARTE');
-        V1 := '&elegir que tabla ver';
+        V1 := ' que tabla ver';
         CASE
             WHEN V1=1 THEN 
                 open n1;
@@ -379,16 +390,16 @@ BEGIN
 
                 close n6;
 
-            ELSE DBMS_OUTPUT.PUT_LINE('Numero inválido');
+            ELSE DBMS_OUTPUT.PUT_LINE('Numero invalido');
         END CASE;
-        
+
 Exception
+when others then
+DBMS_OUTPUT.PUT_LINE('Numero invalido');
 
-DBMS_OUTPUT.PUT_LINE('Numero inválido');
 
-        
 END VERTABLA;
-
+/
 
 
 
@@ -399,12 +410,11 @@ END VERTABLA;
 create or replace procedure Porcentajes(asignaturaElegida varchar2) is 
 
     total number(20);
-    suspensos number(20);
-    aprobados number(20);
-    final1 number(20);
-    final2 number(20);
+    suspensos number(20):=0;
+    aprobados number(20):=0;
+    
     cursor alumnosNota is
-    select sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum group by a.id_alum;
+    select a.id_alum, sum(nota1+nota2+nota3)/3 as notaFinal from matriculado m, alumno a where id_asig=asignaturaElegida and a.id_alum=m.id_alum group by a.id_alum;
     registro alumnosNota%ROWTYPE;
 
     --llamar funcion nota media con alumno y asignatura
@@ -416,10 +426,14 @@ create or replace procedure Porcentajes(asignaturaElegida varchar2) is
 begin
 
     open alumnosTotales;
+    
+        fetch alumnosTotales into registro1;
         total:=registro1.totales;
+        
     close alumnosTotales;
 
     open alumnosNota;
+    
         loop
             fetch alumnosNota into registro;
             EXIT WHEN alumnosNota%NOTFOUND;
@@ -429,13 +443,13 @@ begin
             end if;
         end loop;
 
-close alumnosNota;
-final1:=((aprobados/total)*100);
-final2:=((suspensos/total)*100);
-    DBMS_OUTPUT.PUT_LINE('aprobado: '|| final1);
-    DBMS_OUTPUT.PUT_LINE('suspensos: '|| final2 );
+    close alumnosNota;
+    
 
-    exception
+    DBMS_OUTPUT.PUT_LINE('aprobado: '|| (aprobados/total)*100 || '%');
+    DBMS_OUTPUT.PUT_LINE('suspensos: '|| (suspensos/total)*100 || '%');
+
+exception
     when  others then
     DBMS_OUTPUT.PUT_LINE('errror inesperado ');
 
