@@ -1,0 +1,89 @@
+--NOMBRE COMPONENTE: PROCEDIMIENTO.
+--DESCRIPCION: Muestra los datos de la tabla alumno, profesor o matriculado segun le pasemos por parametro.
+--AUTOR: Juan Martín Ayala 
+--FECHA: 23/04/2019
+create or replace PROCEDURE MOSTRAR_PARA_ELIMINA_REGISTRO(OPCION VARCHAR2) IS
+    CURSOR TABLA_ALUMNO IS SELECT ID_ALUM ,DNI ,NOMBRE ,APELLIDOS ,FECHA_NAC ,NACIDO_EN  FROM ALUMNO;
+    CURSOR TABLA_PROFESOR IS SELECT ID_PROF ,NOMBRE ,APELLIDOS ,DNI ,NACIDO_EN  FROM PROFESOR;
+    CURSOR TABLA_MATRICULADO IS SELECT ID_ALUM ,ID_ASIG ,NOTA1 ,FECHA1 ,NOTA2 ,FECHA2 ,NOTA3 ,FECHA3  FROM MATRICULADO;
+BEGIN
+    IF OPCION LIKE 'ALUMNO' THEN
+        FOR registro IN TABLA_ALUMNO LOOP
+            DBMS_OUTPUT.PUT_LINE ('ID_ALUM: ' || registro.ID_ALUM);
+            DBMS_OUTPUT.PUT_LINE ('DNI: ' || registro.DNI);
+            DBMS_OUTPUT.PUT_LINE ('NOMBRE: ' || registro.NOMBRE);
+            DBMS_OUTPUT.PUT_LINE ('APELLIDOS: ' || registro.APELLIDOS);
+            DBMS_OUTPUT.PUT_LINE ('FECHA_NAC: ' || registro.FECHA_NAC);
+            DBMS_OUTPUT.PUT_LINE ('NACIDO_EN: ' || registro.NACIDO_EN);
+            DBMS_OUTPUT.PUT_LINE (' ---- ');
+        END LOOP;
+        
+        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_ALUM QUE DESEE ELIMINAR');
+       
+        
+    ELSIF OPCION LIKE 'PROFESOR' THEN
+        FOR registro IN TABLA_PROFESOR LOOP
+            DBMS_OUTPUT.PUT_LINE ('ID_PROF: ' || registro.ID_PROF);
+            DBMS_OUTPUT.PUT_LINE ('NOMBRE: ' || registro.NOMBRE);
+            DBMS_OUTPUT.PUT_LINE ('APELLIDOS: ' || registro.APELLIDOS);
+            DBMS_OUTPUT.PUT_LINE ('DNI: ' || registro.DNI);
+            DBMS_OUTPUT.PUT_LINE ('NACIDO_EN: ' || registro.NACIDO_EN);
+            DBMS_OUTPUT.PUT_LINE (' ---- ');
+        END LOOP;
+        
+        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_PROF QUE DESEE ELIMINAR');
+    
+        
+    ELSIF OPCION LIKE 'MATRICULADO' THEN
+        FOR registro IN TABLA_MATRICULADO LOOP
+            DBMS_OUTPUT.PUT_LINE ('ID_ALUM: ' || registro.ID_ALUM);
+            DBMS_OUTPUT.PUT_LINE ('ID_ASIG: ' || registro.ID_ASIG);
+            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || registro.NOTA1);
+            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || registro.FECHA1);
+            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || registro.NOTA2);
+            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || registro.FECHA2);
+            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || registro.NOTA3);
+            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || registro.FECHA2);
+            DBMS_OUTPUT.PUT_LINE (' ---- ');
+        END LOOP;
+        
+        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_PROF QUE DESEE ELIMINAR');
+        
+        
+    ELSE 
+        DBMS_OUTPUT.PUT_LINE('---ERROR---');
+        DBMS_OUTPUT.PUT_LINE('OPCION NO VALIDA');
+    END IF;
+END MOSTRAR_PARA_ELIMINA_REGISTRO;
+/
+
+
+--NOMBRE COMPONENTE: PROCEDIMIENTO.
+--DESCRIPCION: Elimina un registro de la tabla alumno,profesor o matriculado, pasandole por parametros el ID principal de la tabla,
+--el nombre de la tabla y en caso de matriculado, introducir el id de la asignatura tambien. En caso contrario escribir null
+--AUTOR: Juan Martín Ayala 
+--FECHA: 23/04/2019
+CREATE OR REPLACE PROCEDURE ELIMINAR(ID_TABLA NUMERIC, NOMBRE_TABLA VARCHAR2, ID_OPCIONAL NUMERIC) IS
+
+BEGIN
+    IF NOMBRE_TABLA LIKE 'ALUMNO' THEN
+        DELETE FROM MATRICULADO WHERE ID_ALUM=ID_TABLA;
+        DELETE FROM ALUMNO WHERE ID_ALUM=ID_TABLA;
+        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
+        
+    ELSIF NOMBRE_TABLA LIKE 'PROFESOR' THEN
+        DELETE FROM IMPARTE WHERE ID_PROF=ID_TABLA;
+        DELETE FROM PROFESOR WHERE ID_PROF=ID_TABLA;
+        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
+        
+    ELSIF NOMBRE_TABLA LIKE 'MATRICULADO' THEN
+        DELETE FROM MATRICULADO WHERE ID_ALUM=ID_TABLA AND ID_OPCIONAL=ID_ASIG;
+        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
+        
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('---ERROR---');
+        DBMS_OUTPUT.PUT_LINE('OPCION NO VALIDA');
+    END IF;
+END ELIMINAR;
+/
+
