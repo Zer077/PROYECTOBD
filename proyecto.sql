@@ -1,4 +1,4 @@
---Trabajo BD 
+﻿--Trabajo BD 
 
 DROP TABLE MATRICULADO;
 DROP TABLE IMPARTE;
@@ -76,23 +76,25 @@ CREATE TABLE AUDITORIA(
     TABLA VARCHAR2(100),
     USUARIO VARCHAR2(100),
     FECHA DATE,
-    TIPO VARCHAR2(100)
+    TIPO VARCHAR2(100),
+    ANTIGUOSDATOS VARCHAR2(4000),
+    NUEVOSDATOS VARCHAR2(4000)
 );
 
 
-INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (1, 'AlmerÃ­a');
+INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (1, 'Almer铆a');
 INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (2, 'Cadiz');
-INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (3, 'CÃ³rdoba');
+INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (3, 'C贸rdoba');
 INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (4, 'Granada');
 INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (5, 'Huelva');
 INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (6, 'Jaen');
-INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (7, 'MÃ¡laga');
+INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (7, 'M谩laga');
 INSERT INTO PROVINCIA (ID_PROV, Nombre) VALUES (8, 'Sevilla');
 
 INSERT INTO PROFESOR (ID_PROF, Nombre, Apellidos, Nacido_en, dni) VALUES (1, 'Alvaro', 'Acebedo', 8, '78293485F');
 INSERT INTO PROFESOR (ID_PROF, Nombre, Apellidos, Nacido_en, dni) VALUES (2, 'Manuel', 'Gutierrez', 2, '69298485J');
 INSERT INTO PROFESOR (ID_PROF, Nombre, Apellidos, Nacido_en, dni) VALUES (3, 'Celia', 'Villa', 8, '23293465L');
-INSERT INTO PROFESOR (ID_PROF, Nombre, Apellidos, Nacido_en, dni) VALUES (4, 'Maria', 'MuÃ±oz', 3, '19298885N');
+INSERT INTO PROFESOR (ID_PROF, Nombre, Apellidos, Nacido_en, dni) VALUES (4, 'Maria', 'Mu帽oz', 3, '19298885N');
 
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (1, '28756358V', 'Juan', 'Veloso', TO_DATE('11/02/1977','DD/MM/YYYY'), 8);
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (2, '28956157L', 'Sonia', 'Sanchez', TO_DATE('24/08/1981','DD/MM/YYYY'), 8);
@@ -100,15 +102,15 @@ INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUE
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (4, '28754685C', 'Manuel', 'Perez', TO_DATE('04/06/1974','DD/MM/YYYY'), 8);
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (5, '28546821Y', 'Manuel', 'Bueno', TO_DATE('19/12/1985','DD/MM/YYYY'), 2);
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (6, '27656981Y', 'Jose Antonio', 'Montero', TO_DATE('25/07/1990','DD/MM/YYYY'), 3);
-INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (7, '58324542B', 'Juan JosÃ©', 'Sanchez', TO_DATE('01/11/1992','DD/MM/YYYY'), 2);
-INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (8, '56846315M', 'Sandra', 'VallÃ©s', TO_DATE('05/01/1985','DD/MM/YYYY'), 3);
+INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (7, '58324542B', 'Juan Jos茅', 'Sanchez', TO_DATE('01/11/1992','DD/MM/YYYY'), 2);
+INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (8, '56846315M', 'Sandra', 'Vall茅s', TO_DATE('05/01/1985','DD/MM/YYYY'), 3);
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (9, '28468215X', 'Sara', 'Merida', TO_DATE('09/09/1986','DD/MM/YYYY'), 8);
 INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (10, '27684214Z', 'Laura', 'Gutierrez', TO_DATE('9/04/1987','DD/MM/YYYY'), 8);
-INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (11, '28896443S', 'Inmaculada', 'GarcÃ­a', TO_DATE('21/03/1989','DD/MM/YYYY'), 8);
+INSERT INTO ALUMNO (ID_ALUM, DNI, Nombre, Apellidos, FECHA_NAC, Nacido_en) VALUES (11, '28896443S', 'Inmaculada', 'Garc铆a', TO_DATE('21/03/1989','DD/MM/YYYY'), 8);
 
 INSERT INTO ASIGNATURA (ID_ASIG, Nombre) VALUES (1, 'Redes');
 INSERT INTO ASIGNATURA (ID_ASIG, Nombre) VALUES (2, 'Sistemas');
-INSERT INTO ASIGNATURA (ID_ASIG, Nombre) VALUES (3, 'InglÃ©s');
+INSERT INTO ASIGNATURA (ID_ASIG, Nombre) VALUES (3, 'Ingl茅s');
 
 INSERT INTO IMPARTE (ID_PROF, ID_ASIG) VALUES (1, 1);
 INSERT INTO IMPARTE (ID_PROF, ID_ASIG) VALUES (2, 1);
@@ -162,7 +164,7 @@ END BuclePrincipal;
 
 --PROCEDIMIENTO QUE CREE UN BOLETIN DE NOTAS
 
---FUNCION QUE SAQUE LA NOTA1 DE UN ALUMNO Juan Martín Ayala 10/04/2019--
+--FUNCION QUE SAQUE LA NOTA1 DE UN ALUMNO Juan Mart韓 Ayala 10/04/2019--
 
 create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
@@ -176,7 +178,7 @@ BEGIN
 
 END NOTA1_ALUMNO;
 /
---Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+--Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Mart韓 Ayala 10/04/2019--
 create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
     NOTA NUMBER;
@@ -190,7 +192,7 @@ BEGIN
 END NOTA2_ALUMNO;
 /
 
---Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Martín Ayala 10/04/2019--
+--Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Mart韓 Ayala 10/04/2019--
 create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
     NOTA NUMBER;
@@ -466,21 +468,20 @@ end Porcentajes;
 /
 
 
-
 create or replace TRIGGER AUDITORIAALUMNO
 AFTER INSERT OR  DELETE OR UPDATE  ON ALUMNO
-
+FOR EACH ROW
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ALUMNO', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA VALUES ('ALUMNO', USER, SYSDATE,'UPDATE',  :old.ID_ALUM || ' ' || :old.NOMBRE || ' ' || :old.APELLIDOS || ' ' || :old.DNI || ' ' || :old.FECHA_NAC || ' ' || :old.NACIDO_EN, :NEW.NOMBRE || ' ' || :NEW.DNI || ' ' || :NEW.APELLIDOS || ' ' || :NEW.FECHA_NAC || ' ' || :NEW.NACIDO_EN );
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ALUMNO', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA VALUES ('ALUMNO', USER, SYSDATE,'DELETE',  :old.ID_ALUM || ' ' || :old.NOMBRE || ' ' || :old.APELLIDOS || ' ' || :old.DNI || ' ' || :old.FECHA_NAC || ' ' || :old.NACIDO_EN, :NEW.NOMBRE || ' ' || :NEW.DNI || ' ' || :NEW.APELLIDOS || ' ' || :NEW.FECHA_NAC || ' ' || :NEW.NACIDO_EN );
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ALUMNO', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA  VALUES ('ALUMNO', USER, SYSDATE,'UPDATE', :old.ID_ALUM || ' ' || :old.NOMBRE || ' ' || :old.APELLIDOS || ' ' || :old.DNI || ' ' || :old.FECHA_NAC || ' ' || :old.NACIDO_EN, :NEW.NOMBRE || ' ' || :NEW.DNI || ' ' || :NEW.APELLIDOS || ' ' || :NEW.FECHA_NAC || ' ' || :NEW.NACIDO_EN );
 END IF;
 
 END AUDITORIAALUMNO;
@@ -490,17 +491,19 @@ END AUDITORIAALUMNO;
 
 CREATE OR REPLACE TRIGGER AUDITORIAPROFESOR
 AFTER INSERT OR  DELETE OR UPDATE  ON PROFESOR
+FOR EACH ROW
+
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROFESOR', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA VALUES ('PROFESOR', USER, SYSDATE,'UPDATE', :old.id_prof  || ' ' ||  :old.nombre ||' '||:old.apellidos  || ' ' ||  :old.dni  || ' ' || :old.nacido_en,    :new.id_prof  || ' ' ||  :new.nombre || ' ' ||  :old.apellidos  || ' ' ||  :new.dni  || ' ' || :new.nacido_en);
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROFESOR', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA VALUES ('PROFESOR', USER, SYSDATE,'DELETE',  :old.id_prof  || ' ' ||  :old.nombre ||' '||:old.apellidos  || ' ' ||  :old.dni  || ' ' || :old.nacido_en,    :new.id_prof  || ' ' ||  :new.nombre || ' ' ||  :old.apellidos  || ' ' ||  :new.dni  || ' ' || :new.nacido_en);
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROFESOR', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA VALUES ('PROFESOR', USER, SYSDATE,'INSERT',  :old.id_prof  || ' ' ||  :old.nombre ||' '||:old.apellidos  || ' ' ||  :old.dni  || ' ' || :old.nacido_en,    :new.id_prof  || ' ' ||  :new.nombre || ' ' ||  :old.apellidos  || ' ' ||  :new.dni  || ' ' || :new.nacido_en);
 END IF;
 
 END AUDITORIAPROFESOR;
@@ -510,17 +513,19 @@ END AUDITORIAPROFESOR;
 
 CREATE OR REPLACE TRIGGER AUDITORIAPROVINCIA
 AFTER INSERT OR  DELETE OR UPDATE  ON PROVINCIA
+FOR EACH ROW
+
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROVINCIA', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA VALUES ('PROVINCIA', USER, SYSDATE,'UPDATE', :old.id_prov   || ' ' ||  :old.nombre,  :new.id_prov || ' ' || :new.nombre );
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROVINCIA', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA  VALUES ('PROVINCIA', USER, SYSDATE,'DELETE',  :old.id_prov   || ' ' ||  :old.nombre,  :new.id_prov || ' ' || :new.nombre );
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('PROVINCIA', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA VALUES ('PROVINCIA', USER, SYSDATE,'INSERT',  :old.id_prov   || ' ' ||  :old.nombre,  :new.id_prov || ' ' || :new.nombre );
 END IF;
 
 END AUDITORIAPROVINCIA;
@@ -528,17 +533,19 @@ END AUDITORIAPROVINCIA;
 
 CREATE OR REPLACE TRIGGER AUDITORIAASIGNATURA
 AFTER INSERT OR  DELETE OR UPDATE  ON ASIGNATURA
+FOR EACH ROW
+
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ASIGNATURA', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA VALUES ('ASIGNATURA', USER, SYSDATE,'UPDATE',  :old.id_asig   || ' ' ||  :old.nombre,  :new.id_asig || ' ' || :new.nombre  );
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ASIGNATURA', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA  VALUES ('ASIGNATURA', USER, SYSDATE,'DELETE',   :old.id_asig   || ' ' ||  :old.nombre,  :new.id_asig || ' ' || :new.nombre );
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('ASIGNATURA', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA  VALUES ('ASIGNATURA', USER, SYSDATE,'INSERT',   :old.id_asig   || ' ' ||  :old.nombre,  :new.id_asig || ' ' || :new.nombre );
 END IF;
 
 END AUDITORIAASIGNATURA;
@@ -546,17 +553,19 @@ END AUDITORIAASIGNATURA;
 
 CREATE OR REPLACE TRIGGER AUDITORIAMATRICULADO
 AFTER INSERT OR  DELETE OR UPDATE  ON MATRICULADO
+FOR EACH ROW
+
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('MATRICULADO', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA  VALUES ('MATRICULADO', USER, SYSDATE,'UPDATE', :old.id_alum || ' ' || :old.id_asig  || ' ' || :old.nota1  || ' ' || :old.fecha1  || ' ' || :old.nota2  || ' ' || :old.fecha2  || ' ' || :old.nota3  || ' ' || :old.fecha3,     :new.id_alum || ' ' || :new.id_asig  || ' ' || :new.nota1  || ' ' || :new.fecha1  || ' ' || :new.nota2  || ' ' || :new.fecha2  || ' ' || :new.nota3  || ' ' || :new.fecha3);
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('MATRICULADO', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA  VALUES ('MATRICULADO', USER, SYSDATE,'DELETE',  :old.id_alum || ' ' || :old.id_asig  || ' ' || :old.nota1  || ' ' || :old.fecha1  || ' ' || :old.nota2  || ' ' || :old.fecha2  || ' ' || :old.nota3  || ' ' || :old.fecha3,     :new.id_alum || ' ' || :new.id_asig  || ' ' || :new.nota1  || ' ' || :new.fecha1  || ' ' || :new.nota2  || ' ' || :new.fecha2  || ' ' || :new.nota3  || ' ' || :new.fecha3);
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('MATRICULADO', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA  VALUES ('MATRICULADO', USER, SYSDATE,'INSERT',  :old.id_alum || ' ' || :old.id_asig  || ' ' || :old.nota1  || ' ' || :old.fecha1  || ' ' || :old.nota2  || ' ' || :old.fecha2  || ' ' || :old.nota3  || ' ' || :old.fecha3,     :new.id_alum || ' ' || :new.id_asig  || ' ' || :new.nota1  || ' ' || :new.fecha1  || ' ' || :new.nota2  || ' ' || :new.fecha2  || ' ' || :new.nota3  || ' ' || :new.fecha3);
 END IF;
 
 END AUDITORIAMATRICULADO;
@@ -564,21 +573,21 @@ END AUDITORIAMATRICULADO;
 
 CREATE OR REPLACE TRIGGER AUDITORIAIMPARTE
 AFTER INSERT OR  DELETE OR UPDATE  ON IMPARTE
+FOR EACH ROW
+
 
 BEGIN
 IF UPDATING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('IMPARTE', USER, SYSDATE,'UPDATE');
+	INSERT INTO AUDITORIA  VALUES ('IMPARTE', USER, SYSDATE,'UPDATE',  :old.id_prof || ' ' || :old.id_asig,  :new.id_prof || ' ' || :new.id_asig);
 END IF;
 
 IF DELETING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('IMPARTE', USER, SYSDATE,'DELETE');
+	INSERT INTO AUDITORIA   VALUES ('IMPARTE', USER, SYSDATE,'DELETE', :old.id_prof || ' ' || :old.id_asig,  :new.id_prof || ' ' || :new.id_asig);
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA (TABLA, USUARIO, FECHA, TIPO) VALUES ('IMPARTE', USER, SYSDATE,'INSERT');
+	INSERT INTO AUDITORIA   VALUES ('IMPARTE', USER, SYSDATE,'INSERT', :old.id_prof || ' ' || :old.id_asig,  :new.id_prof || ' ' || :new.id_asig);
 END IF;
 
 END AUDITORIAIMPARTE;
 /
-
-
