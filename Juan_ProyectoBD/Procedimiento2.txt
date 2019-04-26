@@ -13,7 +13,7 @@ BEGIN
     RETURN NOTA;
 
 END NOTA1_ALUMNO;
-
+/
 --NOMBRE COMPONENTE: Funcion.
 --DESCRIPCION: Muestra la nota 2 de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
@@ -29,7 +29,7 @@ BEGIN
     RETURN NOTA;
 
 END NOTA2_ALUMNO;
-
+/
 --NOMBRE COMPONENTE: Funcion.
 --DESCRIPCION: Muestra la nota 3 de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
@@ -45,7 +45,7 @@ BEGIN
     RETURN NOTA;
 
 END NOTA3_ALUMNO;
-
+/
 --NOMBRE COMPONENTE: Procedimiento
 --DESCRIPCION: Muestra la nota media de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
