@@ -1,23 +1,23 @@
 --NOMBRE COMPONENTE: Procedimiento
 --DESCRIPCION: Muestra los alumnos matriculados en una asignatura pasada por parametro.
---AUTOR: Juan MartÌn Ayala 
+--AUTOR: Juan Mart√≠n Ayala 
 --FECHA: 22/04/2019
-create or replace PROCEDURE ALUMNOS_MATRICULADOS(N_ASIG NUMERIC) IS
+CREATE OR REPLACE PROCEDURE ALUMNOS_MATRICULADOS(N_ASIG NUMERIC) IS
 
---Cursor que almacenar· el ID_ALUM, Nombre del alumno, Apellidos del alumno y el Nombre de la asignatura 
+--Cursor que almacenar√° el ID_ALUM, Nombre del alumno, Apellidos del alumno y el Nombre de la asignatura 
 CURSOR ALU_MAT IS SELECT MAT.ID_ALUM AS "ID", ALU.NOMBRE AS "NOMBRE", ASI.NOMBRE AS "ASIGNATURA", ALU.APELLIDOS AS "APELLIDO"
                         FROM MATRICULADO MAT, ALUMNO ALU, ASIGNATURA ASI
                         WHERE MAT.ID_ASIG=N_ASIG
-                        AND mat.id_alum=alu.id_alum
-                        AND asi.id_asig=mat.id_asig;
+                        AND MAT.ID_ALUM=ALU.ID_ALUM
+                        AND ASI.ID_ASIG=MAT.ID_ASIG;
 
 BEGIN
 
 --Muestra de datos
-    FOR registro IN ALU_MAT LOOP
-        DBMS_OUTPUT.PUT_LINE ('CÛd. Alumno : ' || registro.ID);
-        DBMS_OUTPUT.PUT_LINE ('Nombre alumno: ' || registro.NOMBRE || ' ' || registro.APELLIDO);
-        DBMS_OUTPUT.PUT_LINE ('Nombre asignatura: ' || registro.ASIGNATURA);
+    FOR REGISTRO IN ALU_MAT LOOP
+        DBMS_OUTPUT.PUT_LINE ('C√≥d. Alumno : ' || REGISTRO.ID);
+        DBMS_OUTPUT.PUT_LINE ('Nombre alumno: ' || REGISTRO.NOMBRE || ' ' || REGISTRO.APELLIDO);
+        DBMS_OUTPUT.PUT_LINE ('Nombre asignatura: ' || REGISTRO.ASIGNATURA);
         DBMS_OUTPUT.PUT_LINE (' ---- ');
     END LOOP;
 

@@ -2,7 +2,7 @@
 --DESCRIPCION: Muestra la nota 1 de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
 --FECHA: 10/04/2019
-create or replace FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+CREATE OR REPLACE FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
     NOTA NUMBER;
 BEGIN
@@ -18,7 +18,7 @@ END NOTA1_ALUMNO;
 --DESCRIPCION: Muestra la nota 2 de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
 --FECHA: 10/04/2019
-create or replace FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+CREATE OR REPLACE FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
     NOTA NUMBER;
 BEGIN
@@ -34,7 +34,7 @@ END NOTA2_ALUMNO;
 --DESCRIPCION: Muestra la nota 3 de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
 --FECHA: 10/04/2019
-create or replace FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
+CREATE OR REPLACE FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
     RETURN NUMBER IS
     NOTA NUMBER;
 BEGIN
@@ -50,32 +50,31 @@ END NOTA3_ALUMNO;
 --DESCRIPCION: Muestra la nota media de un alumno en una asignatura dada.
 --AUTOR: Juan Martín Ayala 
 --FECHA: 10/04/2019
-
 --Recive por parametro un ID_ALUM y un ID_ASIG
-create or replace PROCEDURE NOTA_MEDIA(alum numeric,asig numeric) IS
-    n1 numeric;
-    n2 numeric;
-    n3 numeric;
-    media numeric;
+CREATE OR REPLACE PROCEDURE NOTA_MEDIA(ALUM NUMERIC,ASIG NUMERIC) IS
+    n1 NUMERIC;
+    n2 NUMERIC;
+    n3 NUMERIC;
+    media NUMERIC;
 --n1: Valor de la nota 1 en una asignatura de un alumno
 --n2: Valor de la nota 2 en una asignatura de un alumno
 --n3: Valor de la nota 3 en una asignatura de un alumno
 --media: Nota media calculada con las variables n1 n2 n3
 
 BEGIN
-    n1:=nota1_alumno(alum,asig);
-    n2:=nota2_alumno(alum,asig);
-    n3:=nota3_alumno(alum,asig);
+    n1:=NOTA1_ALUMNO(ALUM,ASIG);
+    n2:=NOTA2_ALUMNO(ALUM,ASIG);
+    n3:=NOTA3_ALUMNO(ALUM,ASIG);
     media:=(n1+n2+n3)/3;
 
 --Muestra de datos
-    dbms_output.put_line('Alumno: ' || alum);
-    dbms_output.put_line('Asignatura: ' || asig);
+    DBMS_OUTPUT.PUT_LINE('Alumno: ' || alum);
+    DBMS_OUTPUT.PUT_LINE('Asignatura: ' || asig);
     DBMS_OUTPUT.PUT_LINE ('-----');
-    dbms_output.put_line('Nota 1: ' || n1);
-    dbms_output.put_line('Nota 2: ' || n2);
-    dbms_output.put_line('Nota 3: ' || n3);
+    DBMS_OUTPUT.PUT_LINE('Nota 1: ' || n1);
+    DBMS_OUTPUT.PUT_LINE('Nota 2: ' || n2);
+    DBMS_OUTPUT.PUT_LINE('Nota 3: ' || n3);
     DBMS_OUTPUT.PUT_LINE ('-----');
-    dbms_output.put_line('Nota media: ' || media);
+    DBMS_OUTPUT.PUT_LINE('Nota media: ' || media);
 
 END NOTA_MEDIA;

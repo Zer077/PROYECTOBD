@@ -2,11 +2,16 @@
 --DESCRIPCION: Muestra los datos de la tabla alumno, profesor o matriculado segun le pasemos por parametro.
 --AUTOR: Juan Martín Ayala 
 --FECHA: 23/04/2019
-create or replace PROCEDURE MOSTRAR_PARA_ELIMINA_REGISTRO(OPCION VARCHAR2) IS
+CREATE OR REPLACE PROCEDURE MOSTRAR_PARA_ELIMINA_REGISTRO(OPCION VARCHAR2) IS
+--Cursor que optiene todos los datos de ALUMNO
     CURSOR TABLA_ALUMNO IS SELECT ID_ALUM ,DNI ,NOMBRE ,APELLIDOS ,FECHA_NAC ,NACIDO_EN  FROM ALUMNO;
+--Cursor que optiene todos los datos de PROFESOR
     CURSOR TABLA_PROFESOR IS SELECT ID_PROF ,NOMBRE ,APELLIDOS ,DNI ,NACIDO_EN  FROM PROFESOR;
+--Cursor que optiene todos los datos de MATRICULADO
     CURSOR TABLA_MATRICULADO IS SELECT ID_ALUM ,ID_ASIG ,NOTA1 ,FECHA1 ,NOTA2 ,FECHA2 ,NOTA3 ,FECHA3  FROM MATRICULADO;
+    
 BEGIN
+--Compara el parametro introducido con las posibles opciones y muestra los datos por pantalla
     IF OPCION LIKE 'ALUMNO' THEN
         FOR registro IN TABLA_ALUMNO LOOP
             DBMS_OUTPUT.PUT_LINE ('ID_ALUM: ' || registro.ID_ALUM);
@@ -64,7 +69,9 @@ END MOSTRAR_PARA_ELIMINA_REGISTRO;
 --AUTOR: Juan Martín Ayala 
 --FECHA: 23/04/2019
 CREATE OR REPLACE PROCEDURE ELIMINAR(ID_TABLA NUMERIC, NOMBRE_TABLA VARCHAR2, ID_OPCIONAL NUMERIC) IS
-
+--ID_TABLA: espera el id primario de cualquiera de las tablas
+--NOMBRE_TABLA: espera el nombre de la tabla
+--ID_OPCIONAL: espera que se introduzca el id secundario en caso de que exista (solo para la tabla matriculados)
 BEGIN
     IF NOMBRE_TABLA LIKE 'ALUMNO' THEN
         DELETE FROM MATRICULADO WHERE ID_ALUM=ID_TABLA;
