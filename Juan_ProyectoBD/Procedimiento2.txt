@@ -76,5 +76,8 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Nota 3: ' || n3);
     DBMS_OUTPUT.PUT_LINE ('-----');
     DBMS_OUTPUT.PUT_LINE('Nota media: ' || media);
-
+EXCEPTION
+    WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE ('Ocurrió un error: Ha introducido un valor que no existe');
+    
 END NOTA_MEDIA;
