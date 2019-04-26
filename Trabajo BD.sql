@@ -95,7 +95,7 @@ INSERT INTO PROVINCIA (ID_PROV, NOMBRE) VALUES (8, 'Sevilla');
 INSERT INTO PROFESOR (ID_PROF, NOMBRE, APELLIDOS, NACIDO_EN, DNI) VALUES (1, 'Alvaro', 'Acebedo', 8, '78293485F');
 INSERT INTO PROFESOR (ID_PROF, NOMBRE, APELLIDOS, NACIDO_EN, DNI) VALUES (2, 'Manuel', 'Gutierrez', 2, '69298485J');
 INSERT INTO PROFESOR (ID_PROF, NOMBRE, APELLIDOS, NACIDO_EN, DNI) VALUES (3, 'Celia', 'Villa', 8, '23293465L');
-INSERT INTO PROFESOR (ID_PROF, NOMBRE, APELLIDOS, NACIDO_EN, DNI) VALUES (4, 'Maria', 'MuÒoz', 3, '19298885N');
+INSERT INTO PROFESOR (ID_PROF, NOMBRE, APELLIDOS, NACIDO_EN, DNI) VALUES (4, 'Maria', 'Mu√±oz', 3, '19298885N');
 
 INSERT INTO ALUMNO (ID_ALUM, DNI, NOMBRE, APELLIDOS, FECHA_NAC, NACIDO_EN) VALUES (1, '28756358V', 'Juan', 'Veloso', TO_DATE('11/02/1977','DD/MM/YYYY'), 8);
 INSERT INTO ALUMNO (ID_ALUM, DNI, NOMBRE, APELLIDOS, FECHA_NAC, NACIDO_EN) VALUES (2, '28956157L', 'Sonia', 'Sanchez', TO_DATE('24/08/1981','DD/MM/YYYY'), 8);
@@ -152,13 +152,13 @@ CREATE OR REPLACE PROCEDURE INSERTARDATOS (OPCION NUMBER) IS
 BEGIN
 CASE OPCION
 WHEN 1 THEN
-IF ALUMNOS (17, '12345678Q', 'Manuel', 'Fern·ndez', '19/10/1984', 1)=TRUE THEN 
+IF ALUMNOS (17, '12345678Q', 'Manuel', 'Fern√°ndez', '19/10/1984', 1)=TRUE THEN 
     DBMS_OUTPUT.PUT_LINE ('El alumno se ha insertado correctamente');
 ELSE 
     DBMS_OUTPUT.PUT_LINE ('El alumno no se ha podido insertar');
 END IF;
 WHEN 2 THEN
-IF PROFESORES (5, 'JoaquÌn', 'S·nchez', '12345678J', 3)=TRUE THEN
+IF PROFESORES (5, 'Joaqu√≠n', 'S√°nchez', '12345678J', 3)=TRUE THEN
     DBMS_OUTPUT.PUT_LINE ('El profesor se ha insertado correctamente');
 ELSE
     DBMS_OUTPUT.PUT_LINE ('El profesor no se ha podido insertar');
@@ -200,7 +200,7 @@ END ALUMNOS;
 
 --FUNCION DE INSERTAR PROFESOR
 
-/*FunciÛn que permite insertar datos en la tabla "profesor", se le pasar·n unos par·metros que introduce el usuario y estos
+/*Funci√≥n que permite insertar datos en la tabla "profesor", se le pasar√°n unos par√°metros que introduce el usuario y estos
 son los que se insertan en la tabla.*/***abraham***
 CREATE OR REPLACE FUNCTION PROFESORES (ID_PROF NUMBER, NOMBRE VARCHAR2, APELLIDOS VARCHAR2, DNI VARCHAR2, NACIDO_EN NUMBER)
 RETURN BOOLEAN IS
@@ -223,7 +223,7 @@ END PROFESORES;
 
 --FUNCION DE INSERTAR MATRICULADO
 
-/*FunciÛn que permite insertar datos en la tabla "matriculado", se le pasar·n unos par·metros que introduce el usuario y estos
+/*Funci√≥n que permite insertar datos en la tabla "matriculado", se le pasar√°n unos par√°metros que introduce el usuario y estos
 son los que se insertan en la tabla.*/***abraham***
 CREATE OR REPLACE FUNCTION MATRICULADOS (ID_ALUM NUMBER, ID_ASIG NUMBER, NOTA1 NUMBER, NOTA2 NUMBER, NOTA3 NUMBER)
 RETURN BOOLEAN IS
@@ -650,7 +650,7 @@ BEGIN
     
     IF INSERTING THEN
         INSERT INTO AUDITORIA   VALUES ('IMPARTE', USER, SYSDATE,'INSERT', :OLD.ID_PROF || ' ' || :OLD.ID_ASIG,  :NEW.ID_PROF || ' ' || :NEW.ID_ASIG);
- COMMIT;.
+ COMMIT;
    END IF;
 
 END AUDITORIAIMPARTE;
@@ -671,7 +671,7 @@ END AUDITORIAIMPARTE;
 
 --7         
 
-/*FunciÛn que devuelve la nota media de un alumno en una asignatura, se introducir·n los valores del nombre y apellido del alumno, y la asignatura deseada*/
+/*Funci√≥n que devuelve la nota media de un alumno en una asignatura, se introducir√°n los valores del nombre y apellido del alumno, y la asignatura deseada*/
 CREATE OR REPLACE FUNCTION NOTA_MEDIA_ALUM (NOM_ALU VARCHAR2, APE_ALU VARCHAR2, ASIG VARCHAR2)
 RETURN VARCHAR2 IS
     ID_ALUM NUMBER(2);
@@ -719,7 +719,7 @@ END NOTA_MEDIA_ALUM;
 
 
 
-/*FunciÛn que devuelve el promedio de notas de todos los alumnos en una asignatura, se introducir· el nombre de la asignatura y nos devolver· los datos deseados*/***abraham***
+/*Funci√≥n que devuelve el promedio de notas de todos los alumnos en una asignatura, se introducir√° el nombre de la asignatura y nos devolver√° los datos deseados*/***abraham***
 CREATE OR REPLACE FUNCTION NOTA_MEDIA_ASIG (ASIG VARCHAR2)
 RETURN VARCHAR2 IS
     ASIGNATURA VARCHAR2(20);
