@@ -176,7 +176,7 @@ END INSERTARDATOS;
 
 
 
---FUNCION DE INSERTAR ALUMNO
+--FUNCION DE INSERTAR ALUMNO***abraham***
 
 
 CREATE OR REPLACE FUNCTION ALUMNOS (ID_ALUM NUMBER, DNI VARCHAR2, NOMBRE VARCHAR2, APELLIDOS VARCHAR2, FECHA_NAC DATE, NACIDO_EN NUMBER)
@@ -199,7 +199,7 @@ END ALUMNOS;
 --FUNCION DE INSERTAR PROFESOR
 
 /*Función que permite insertar datos en la tabla "profesor", se le pasarán unos parámetros que introduce el usuario y estos
-son los que se insertan en la tabla.*/
+son los que se insertan en la tabla.*/***abraham***
 CREATE OR REPLACE FUNCTION PROFESORES (ID_PROF NUMBER, NOMBRE VARCHAR2, APELLIDOS VARCHAR2, DNI VARCHAR2, NACIDO_EN NUMBER)
 RETURN BOOLEAN IS
 BEGIN
@@ -222,7 +222,7 @@ END PROFESORES;
 --FUNCION DE INSERTAR MATRICULADO
 
 /*Función que permite insertar datos en la tabla "matriculado", se le pasarán unos parámetros que introduce el usuario y estos
-son los que se insertan en la tabla.*/
+son los que se insertan en la tabla.*/***abraham***
 CREATE OR REPLACE FUNCTION MATRICULADOS (ID_ALUM NUMBER, ID_ASIG NUMBER, NOTA1 NUMBER, NOTA2 NUMBER, NOTA3 NUMBER)
 RETURN BOOLEAN IS
 BEGIN
@@ -236,168 +236,6 @@ EXCEPTION
 END MATRICULADOS;
 /
 
-
-
-
-
-
-
---PROCEDIMIENTO QUE CREE UN BOLETIN DE NOTAS
-
-
-
-
-
-
-
-
-
-
---FUNCION QUE SAQUE LA NOTA1 DE UN ALUMNO Juan Mart? Ayala 10/04/2019--
-
-CREATE OR REPLACE FUNCTION NOTA1_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA1 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA1_ALUMNO;
-/
---Funcion. Muestra la nota 2 de un alumno en una asignatura dada. Juan Mart? Ayala 10/04/2019--
-CREATE OR REPLACE FUNCTION NOTA2_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA2 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA2_ALUMNO;
-/
-
---Funcion. Muestra la nota 3 de un alumno en una asignatura dada. Juan Mart? Ayala 10/04/2019--
-CREATE OR REPLACE FUNCTION NOTA3_ALUMNO (ALUM NUMBER, ASIG NUMBER)
-    RETURN NUMBER IS
-    NOTA NUMBER;
-BEGIN
-    SELECT NOTA3 INTO NOTA
-        FROM MATRICULADO 
-        WHERE ID_ALUM=ALUM 
-        AND ID_ASIG=ASIG;
-    RETURN NOTA;
-
-END NOTA3_ALUMNO;
-/
-
-
---PROCEDIMIENTO QUE DADA X ASIGNATURA MUESTRA TODOS LOS ALUMNOS
-
-
---AUTOR: Juan Martín Ayala 
---FECHA: 23/04/2019
-CREATE OR REPLACE PROCEDURE MOSTRAR_PARA_ELIMINA_REGISTRO(OPCION VARCHAR2) IS
---Cursor que optiene todos los datos de ALUMNO
-    CURSOR TABLA_ALUMNO IS SELECT ID_ALUM ,DNI ,NOMBRE ,APELLIDOS ,FECHA_NAC ,NACIDO_EN  FROM ALUMNO;
---Cursor que optiene todos los datos de PROFESOR
-    CURSOR TABLA_PROFESOR IS SELECT ID_PROF ,NOMBRE ,APELLIDOS ,DNI ,NACIDO_EN  FROM PROFESOR;
---Cursor que optiene todos los datos de MATRICULADO
-    CURSOR TABLA_MATRICULADO IS SELECT ID_ALUM ,ID_ASIG ,NOTA1 ,FECHA1 ,NOTA2 ,FECHA2 ,NOTA3 ,FECHA3  FROM MATRICULADO;
-
-BEGIN
---Compara el parametro introducido con las posibles opciones y muestra los datos por pantalla
-    IF OPCION LIKE 'ALUMNO' THEN
-        FOR REGISTRO IN TABLA_ALUMNO LOOP
-            DBMS_OUTPUT.PUT_LINE ('ID_ALUM: ' || REGISTRO.ID_ALUM);
-            DBMS_OUTPUT.PUT_LINE ('DNI: ' || REGISTRO.DNI);
-            DBMS_OUTPUT.PUT_LINE ('NOMBRE: ' || REGISTRO.NOMBRE);
-            DBMS_OUTPUT.PUT_LINE ('APELLIDOS: ' || REGISTRO.APELLIDOS);
-            DBMS_OUTPUT.PUT_LINE ('FECHA_NAC: ' || REGISTRO.FECHA_NAC);
-            DBMS_OUTPUT.PUT_LINE ('NACIDO_EN: ' || REGISTRO.NACIDO_EN);
-            DBMS_OUTPUT.PUT_LINE (' ---- ');
-        END LOOP;
-        
-        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_ALUM QUE DESEE ELIMINAR');
-       
-        
-    ELSIF OPCION LIKE 'PROFESOR' THEN
-        FOR REGISTRO IN TABLA_PROFESOR LOOP
-            DBMS_OUTPUT.PUT_LINE ('ID_PROF: ' || REGISTRO.ID_PROF);
-            DBMS_OUTPUT.PUT_LINE ('NOMBRE: ' || REGISTRO.NOMBRE);
-            DBMS_OUTPUT.PUT_LINE ('APELLIDOS: ' || REGISTRO.APELLIDOS);
-            DBMS_OUTPUT.PUT_LINE ('DNI: ' || REGISTRO.DNI);
-            DBMS_OUTPUT.PUT_LINE ('NACIDO_EN: ' || REGISTRO.NACIDO_EN);
-            DBMS_OUTPUT.PUT_LINE (' ---- ');
-        END LOOP;
-        
-        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_PROF QUE DESEE ELIMINAR');
-    
-        
-    ELSIF OPCION LIKE 'MATRICULADO' THEN
-        FOR REGISTRO IN TABLA_MATRICULADO LOOP
-            DBMS_OUTPUT.PUT_LINE ('ID_ALUM: ' || REGISTRO.ID_ALUM);
-            DBMS_OUTPUT.PUT_LINE ('ID_ASIG: ' || REGISTRO.ID_ASIG);
-            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || REGISTRO.NOTA1);
-            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || REGISTRO.FECHA1);
-            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || REGISTRO.NOTA2);
-            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || REGISTRO.FECHA2);
-            DBMS_OUTPUT.PUT_LINE ('NOTA1: ' || REGISTRO.NOTA3);
-            DBMS_OUTPUT.PUT_LINE ('FECHA1: ' || REGISTRO.FECHA2);
-            DBMS_OUTPUT.PUT_LINE (' ---- ');
-        END LOOP;
-        
-        DBMS_OUTPUT.PUT_LINE('INTRODUZCA EL ID_PROF QUE DESEE ELIMINAR');
-        
-        
-    ELSE 
-        DBMS_OUTPUT.PUT_LINE('---ERROR---');
-        DBMS_OUTPUT.PUT_LINE('OPCION NO VALIDA');
-    END IF;
-END MOSTRAR_PARA_ELIMINA_REGISTRO;
-/
-
-
-
-
-
-
-
---PROCEDIMIENTO DE ELIMINAR REGISTRO POR ROWNUM DE ALUMNO PROFESOR O MATRICULADO POSTERIORMENTE A MOSTRARLA
-
-
---AUTOR: Juan Martín Ayala 
---FECHA: 23/04/2019
-CREATE OR REPLACE PROCEDURE ELIMINAR(ID_TABLA NUMERIC, NOMBRE_TABLA VARCHAR2, ID_OPCIONAL NUMERIC) IS
-
---ID_TABLA: espera el id primario de cualquiera de las tablas
---NOMBRE_TABLA: espera el nombre de la tabla
---ID_OPCIONAL: espera que se introduzca el id secundario en caso de que exista (solo para la tabla matriculados)
-BEGIN
-    IF NOMBRE_TABLA LIKE 'ALUMNO' THEN
-        DELETE FROM MATRICULADO WHERE ID_ALUM=ID_TABLA;
-        DELETE FROM ALUMNO WHERE ID_ALUM=ID_TABLA;
-        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
-        
-    ELSIF NOMBRE_TABLA LIKE 'PROFESOR' THEN
-        DELETE FROM IMPARTE WHERE ID_PROF=ID_TABLA;
-        DELETE FROM PROFESOR WHERE ID_PROF=ID_TABLA;
-        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
-        
-    ELSIF NOMBRE_TABLA LIKE 'MATRICULADO' THEN
-        DELETE FROM MATRICULADO WHERE ID_ALUM=ID_TABLA AND ID_OPCIONAL=ID_ASIG;
-        DBMS_OUTPUT.PUT_LINE('REGISTRO ELIMINADO');
-        
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('---ERROR---');
-        DBMS_OUTPUT.PUT_LINE('OPCION NO VALIDA');
-    END IF;
-END ELIMINAR;
-/
 
 
 
@@ -668,7 +506,7 @@ END PORCENTAJES;
 
 
 
---Auditorias, inserta en una auditoria la tabla editada, como fue editada, el usuario y hora de edicion y nuevos y antiguos datos
+--Auditorias, inserta en una auditoria la tabla editada, como fue editada, el usuario y hora de edicion y nuevos y antiguos datos*****jose angel atoche*****
 
 
 CREATE OR REPLACE TRIGGER AUDITORIAALUMNO
@@ -684,7 +522,7 @@ IF DELETING THEN
 END IF;
 
 IF INSERTING THEN
-	INSERT INTO AUDITORIA  VALUES ('ALUMNO', USER, SYSDATE,'UPDATE', :OLD.ID_ALUM || ' ' || :OLD.NOMBRE || ' ' || :OLD.APELLIDOS || ' ' || :OLD.DNI || ' ' || :OLD.FECHA_NAC || ' ' || :OLD.NACIDO_EN, :NEW.NOMBRE || ' ' || :NEW.DNI || ' ' || :NEW.APELLIDOS || ' ' || :NEW.FECHA_NAC || ' ' || :NEW.NACIDO_EN );
+	INSERT INTO AUDITORIA  VALUES ('ALUMNO', USER, SYSDATE,'INSERT', :OLD.ID_ALUM || ' ' || :OLD.NOMBRE || ' ' || :OLD.APELLIDOS || ' ' || :OLD.DNI || ' ' || :OLD.FECHA_NAC || ' ' || :OLD.NACIDO_EN, :NEW.NOMBRE || ' ' || :NEW.DNI || ' ' || :NEW.APELLIDOS || ' ' || :NEW.FECHA_NAC || ' ' || :NEW.NACIDO_EN );
 END IF;
 
 END AUDITORIAALUMNO;
@@ -858,7 +696,7 @@ END NOTA_MEDIA_ALUM;
 
 
 
-/*Función que devuelve el promedio de notas de todos los alumnos en una asignatura, se introducirá el nombre de la asignatura y nos devolverá los datos deseados*/
+/*Función que devuelve el promedio de notas de todos los alumnos en una asignatura, se introducirá el nombre de la asignatura y nos devolverá los datos deseados*/***abraham***
 CREATE OR REPLACE FUNCTION NOTA_MEDIA_ASIG (ASIG VARCHAR2)
 RETURN VARCHAR2 IS
     ASIGNATURA VARCHAR2(20);
