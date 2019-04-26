@@ -20,5 +20,8 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE ('Nombre asignatura: ' || REGISTRO.ASIGNATURA);
         DBMS_OUTPUT.PUT_LINE (' ---- ');
     END LOOP;
+    EXCEPTION
+    WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE ('Ocurrió un error: Ha introducido un valor que no existe');
 
 END ALUMNOS_MATRICULADOS;
